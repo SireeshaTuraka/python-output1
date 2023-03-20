@@ -1,0 +1,49 @@
+First, we need to import the necessary libraries and read the data from the CSV file. We will use pandas library to read the csv file.
+Code:
+import pandas as pd
+data = pd.read_csv('orders.csv')
+Task 1:
+We can create a new column 'month' by extracting the month from the order_date column. Then we can group the data by month and sum the revenue.
+Code:
+# extract month from order_date column
+data['month'] = pd.to_datetime(data['order_date']).dt.month
+# group by month and sum the revenue
+monthly_revenue = data.groupby('month')['product_price'].sum()
+
+Task 2:
+We can group the data by product_id and sum the revenue.
+product_revenue = data.groupby('product_id')['product_price'].sum()
+Task 3: 
+We can group the data by customer_id and sum the revenue.
+customer_revenue = data.groupby('customer_id')['product_price'].sum()
+Task 4:
+We can sort the data by revenue in descending order and select the top 10 customers.
+top_10_customers = customer_revenue.sort_values(ascending=False)[:10]
+We can write the tests for our code. We will use unittest library to write the tests.
+ Code:
+import unittest
+class TestOrderAnalysis(unittest.TestCase):
+
+    def setUp(self):
+        self.data = pd.read_csv('orders.csv')
+
+    def test_monthly_revenue(self):
+        self.assertEqual(list(monthly_revenue), [3000.0, 2800.0, 4500.0, 4200.0])
+
+    def test_product_revenue(self):
+        self.assertEqual(product_revenue.loc[1], 5200.0)
+        self.assertEqual(product_revenue.loc[2], 3700.0)
+        self.assertEqual(product_revenue.loc[3], 4000.0)
+        self.assertEqual(product_revenue.loc[4], 4400.0)
+
+    def test_customer_revenue(self):
+        self.assertEqual(customer_revenue.loc[1], 5600.0)
+        self.assertEqual(customer_revenue.loc[2], 3700.0)
+        self.assertEqual(customer_revenue.loc[3], 4700.0)
+        self.assertEqual(customer_revenue.loc[4], 3400.0)
+
+    def test_top_10_customers(self):
+        self.assertEqual(list(top_10_customers.index), [1, 3, 4, 2])
+
+if __name__ == '__main__':
+    unittest.main()
