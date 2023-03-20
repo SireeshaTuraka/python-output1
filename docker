@@ -1,0 +1,22 @@
+Dockerfile for task service:
+FROM python:3.9
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+CMD [ "python", "app.py" ]
+
+Dockerfile for test service:
+FROM python:3.9
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+CMD [ "python", "test.py" ]
+
+create a docker-compose file to run both the services.
+docker-compose.yml:
+yaml
+version: "3.9"
+services:
+  task:
